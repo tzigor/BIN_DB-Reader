@@ -356,6 +356,7 @@ end;
 
 procedure CopyRecord(RecType: Char; RecordLength: Word);
 var i: Word;
+    time: longWord;
 begin
   OutBytes[OutCounter]:= (RecordLength + 1) And $00FF;
   OutCounter:= OutCounter + 1;
@@ -363,7 +364,14 @@ begin
   OutCounter:= OutCounter + 1;
   OutBytes[OutCounter]:= Ord(RecType);
   OutCounter:= OutCounter + 1;
-  for i:=0 to RecordLength - 1 do begin
+  //time:= FillLongWord(Data[3], Data[2], Data[1], Data[0]);
+  //time:= time + 547998501;
+  //OutBytes[OutCounter]:= time And $000000FF;
+  //OutBytes[OutCounter + 1]:= (time >> 8) And $000000FF;
+  //OutBytes[OutCounter + 2]:= (time >> 16) And $000000FF;
+  //OutBytes[OutCounter + 3]:= time >> 24;
+  //OutCounter:= OutCounter + 4;
+  for i:=4 to RecordLength - 1 do begin
     OutBytes[OutCounter]:= Data[i];
     OutCounter:= OutCounter + 1;
   end;
@@ -412,6 +420,7 @@ var fileLen: longWord;
     DataChannel: TDataChannel;
     ChannelCounter, i: Word;
     FirstF: Boolean;
+    X,Y: longInt;
 begin
   if OpenDialog1.Execute then begin
      DataGrid.Clear;
@@ -463,6 +472,7 @@ begin
                        end
                        else if RecordType = 'F' then
      until Counter >= fileLen;
+     DataGrid.MouseToCell(0,0,X,Y);
      BIN_DB_View.Text:= pStr;
      DataText.Text:= wStr;
      //ShowMessage('ChannelCounter - ' + IntToStr(ChannelCounter) + '     Array Size - ' + IntToStr(length(DataChannels)));
